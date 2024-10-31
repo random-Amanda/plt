@@ -1,10 +1,22 @@
 class PigLatin:
 
+ 
     def __init__(self, phrase: str):
-        pass
+        self.phrase = phrase
 
     def get_phrase(self) -> str:
-        pass
+        return self.phrase
 
     def translate(self) -> str:
-        pass
+        vowels = ('a', 'e', 'i', 'o', 'u')
+        if self.phrase=="":
+            return "nil"
+        if len(self.phrase.split()) == 1 and self.phrase.lower()[0] in vowels:
+            if self.phrase[-1]=='y':
+                return self.phrase+"nay"
+            if self.phrase[-1] in vowels:
+                return self.phrase+"yay"            
+            if self.phrase[-1] not in vowels:
+                return self.phrase+"ay"
+        if len(self.phrase.split()) == 1 and (self.phrase.lower()[0] not in vowels) and (self.phrase.lower()[1] in vowels):
+            return self.phrase[1:]+self.phrase[0]+"ay"
