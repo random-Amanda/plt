@@ -20,3 +20,13 @@ class PigLatin:
                 return self.phrase+"ay"
         if len(self.phrase.split()) == 1 and (self.phrase.lower()[0] not in vowels) and (self.phrase.lower()[1] in vowels):
             return self.phrase[1:]+self.phrase[0]+"ay"
+        if len(self.phrase.split()) == 1 and (self.phrase.lower()[0] not in vowels) and (self.phrase.lower()[1] not in vowels):
+            newSuffix=""
+            index=0
+            for i in self.phrase:
+                if i not in vowels:
+                    newSuffix+=i
+                    index+=1
+                else:
+                    break
+            return self.phrase[index:]+newSuffix+"ay"
