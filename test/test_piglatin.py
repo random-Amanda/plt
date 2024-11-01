@@ -8,7 +8,7 @@ class TestPigLatin(unittest.TestCase):
     def test_inputPhrase(self):
         phrase="Hello World"
         translator = PigLatin(phrase) 
-        self.assertTrue(translator.get_phrase(phrase) == phrase)
+        self.assertTrue(translator.get_phrase() == phrase)
 
     def test_EmptyPhrase(self):
         phrase=""

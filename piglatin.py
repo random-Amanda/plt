@@ -3,12 +3,13 @@ class PigLatin:
     
     vowels = ('a', 'e', 'i', 'o', 'u')
     punctuations = ('.', ',', ';', ':', '\'', '?', '!', ')', '(')
+    phrase=""
  
-    def __init__(self, phrase: str):
-        input = phrase
+    def __init__(self, input: str):
+        self.phrase=input
 
-    def get_phrase(self,input) -> str:
-        return input
+    def get_phrase(self) -> str:
+        return self.phrase
 
     def translate(self, input) -> str:
         if input=="":
