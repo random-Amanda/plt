@@ -1,44 +1,78 @@
+from error import PigLatinError
 class PigLatin:
     
     vowels = ('a', 'e', 'i', 'o', 'u')
+    punctuations = ('.', ',', ';', ':', '\'', '?', '!', ')', '(')
  
     def __init__(self, phrase: str):
-        self.phrase = phrase
+        input = phrase
 
-    def get_phrase(self) -> str:
-        return self.phrase
+    def get_phrase(self,input) -> str:
+        return input
 
-    def translate(self) -> str:
-        if self.phrase=="":
-            return "nil"
-        if len(self.phrase.split()) == 1 and self.phrase.lower()[0] in self.vowels:
-            return self.translateVowels()            
-        if len(self.phrase.split()) == 1 and (self.phrase.lower()[0] not in self.vowels) and (self.phrase.lower()[1] in self.vowels):
-            return self.translateConsanent()
-        if len(self.phrase.split()) == 1 and (self.phrase.lower()[0] not in self.vowels) and (self.phrase.lower()[1] not in self.vowels):
-            return self.translateConsanents()
-        if len(self.phrase.split(" "))>1:
-            for i in self.phrase.split(" "):
-                self.translate(i)
+    def translate(self, input) -> str:
+        if input=="":
+            return "nil"        
+        if input[0].isupper():
+            if input.isupper():
+                return self.translate(input.lower()).upper()
+            elif input.istitle():
+                return self.translate(input.lower()).title()
+            else:
+                raise PigLatinError("Invalid Case")
+        if input[-1].isalpha() != True:
+            if input[-1] in self.punctuations:
+                return self.translatePunctuation(input)
+            else:
+                raise PigLatinError("Invalid Punctuation")
+        if (len(input.split(" "))>1):
+            return self.translateWords(input)
+        if (len(input.split("-"))>1):
+            return self.translateCompositeWords(input)
+        if len(input.split()) == 1 and input.lower()[0] in self.vowels:
+            return self.translateVowels(input)            
+        if len(input.split()) == 1 and (input.lower()[0] not in self.vowels) and (input.lower()[1] in self.vowels):
+            return self.translateConsanent(input)
+        if len(input.split()) == 1 and (input.lower()[0] not in self.vowels) and (input.lower()[1] not in self.vowels):
+            return self.translateConsanents(input)
+
         
-    def translateVowels(self) -> str:
-        if self.phrase[-1]=='y':
-            return self.phrase+"nay"
-        if self.phrase[-1] in self.vowels:
-            return self.phrase+"yay"            
-        if self.phrase[-1] not in self.vowels:
-            return self.phrase+"ay"
+            
         
-    def translateConsanent(self) -> str:
-        return self.phrase[1:]+self.phrase[0]+"ay"
+    def translateVowels(self,input) -> str:
+        if input[-1]=='y':
+            return input+"nay"
+        if input.lower()[-1] in self.vowels:
+            return input+"yay"            
+        if input.lower()[-1] not in self.vowels:
+            return input+"ay"
+        
+    def translateConsanent(self,input) -> str:
+        return input[1:]+input[0]+"ay"
     
-    def translateConsanents(self) -> str:
+    def translateConsanents(self,input) -> str:
         newSuffix=""
         index=0
-        for i in self.phrase:
+        for i in input:
             if i not in self.vowels:
                 newSuffix+=i
                 index+=1
             else:
                 break
-        return self.phrase[index:]+newSuffix+"ay"
+        return input[index:]+newSuffix+"ay"
+    
+    def translateWords(self, input) -> str:
+        result=""
+        for i in input.split(" "):
+            result+=(" "+self.translate(i))
+        return result[1:]
+    
+    def translateCompositeWords(self, input) -> str:
+        result=""
+        for i in input.split("-"):
+            result+=("-"+self.translate(i))
+        return result[1:]
+    
+    def translatePunctuation(self, input) -> str:
+        return self.translate(input[:-1])+input[-1]
+    
